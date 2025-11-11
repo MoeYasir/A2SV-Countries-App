@@ -5,13 +5,24 @@ class CountrySummary extends Equatable {
   final String flagUrl;
   final int population;
   final String cca2;
+  final bool isFavourite;
 
   const CountrySummary({
     required this.name,
     required this.flagUrl,
     required this.population,
     required this.cca2,
+    this.isFavourite = false,
   });
+  CountrySummary copyWith({bool? isFavourite}) {
+    return CountrySummary(
+      name: name,
+      flagUrl: flagUrl,
+      population: population,
+      cca2: cca2,
+      isFavourite: isFavourite ?? this.isFavourite,
+    );
+  }
 
   factory CountrySummary.fromJson(Map<String, dynamic> json) {
     return CountrySummary(
@@ -23,5 +34,5 @@ class CountrySummary extends Equatable {
   }
 
   @override
-  List<Object?> get props => [name, flagUrl, population, cca2];
+  List<Object?> get props => [name, flagUrl, population, cca2, isFavourite];
 }

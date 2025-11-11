@@ -60,13 +60,21 @@ class CountryRemoteDataSourceImpl implements CountryRemoteDataSource {
               'name,flags,population,capital,region,subregion,area,timezones',
         },
       );
-      if (response.statusCode == 200) {
-        final List<dynamic> data = response.data;
-        return CountryDetails.fromJson(data.first);
+
+      if (response.statusCode == 200 && response.data != null) {
+        final countryData = response.data as Map<String, dynamic>;
+        return CountryDetails.fromJson(countryData);
       } else {
-        throw Exception('Failed to load country details');
+        throw Exception(
+          'Failed to load country details. Status code: ${response.statusCode}',
+        );
       }
     } catch (e) {
+      print('Error fetching details for code $code: $e');
+      if (e is DioException) {
+        print('DioException Response: ${e.response}');
+      }
+
       throw Exception('Failed to load country details: $e');
     }
   }
