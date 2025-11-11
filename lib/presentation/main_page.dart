@@ -27,8 +27,6 @@ class _MainPageView extends StatefulWidget {
 class _MainPageViewState extends State<_MainPageView> {
   int _selectedIndex = 0;
 
-  static const List<Widget> _pages = <Widget>[HomePage(), FavouritesPage()];
-
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -37,8 +35,13 @@ class _MainPageViewState extends State<_MainPageView> {
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> pages = <Widget>[
+      HomePage(isActive: _selectedIndex == 0),
+      FavouritesPage(isActive: _selectedIndex == 1),
+    ];
+
     return Scaffold(
-      body: IndexedStack(index: _selectedIndex, children: _pages),
+      body: IndexedStack(index: _selectedIndex, children: pages),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),

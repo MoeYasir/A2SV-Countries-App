@@ -69,17 +69,20 @@ class CountryDetailPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            SizedBox(
-              height: 400.h,
+            Hero(
+              tag: countryCode,
+              child: SizedBox(
+                height: 400.h,
 
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(16.0.r),
-                child: country.flagUrl.endsWith('.svg')
-                    ? SvgPicture.network(country.flagUrl, fit: BoxFit.cover)
-                    : CachedNetworkImage(
-                        imageUrl: country.flagUrl,
-                        fit: BoxFit.cover,
-                      ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(16.0.r),
+                  child: country.flagUrl.endsWith('.svg')
+                      ? SvgPicture.network(country.flagUrl, fit: BoxFit.cover)
+                      : CachedNetworkImage(
+                          imageUrl: country.flagUrl,
+                          fit: BoxFit.cover,
+                        ),
+                ),
               ),
             ),
             SizedBox(height: 16.h),

@@ -11,8 +11,13 @@ import 'package:flutter_svg/svg.dart';
 class AppListTile extends StatelessWidget {
   final CountrySummary country;
   final TileStyle style;
-
-  const AppListTile({super.key, required this.country, required this.style});
+  final bool isHeroEnabled;
+  const AppListTile({
+    super.key,
+    required this.country,
+    required this.style,
+    this.isHeroEnabled = true,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -64,25 +69,28 @@ class AppListTile extends StatelessWidget {
     final double size = isFavouriteStyle ? 60 : 75;
     final double width = isFavouriteStyle ? 60 : 100;
 
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(12.0),
-      child: SizedBox(
-        width: width,
-        height: size,
-        child: country.flagUrl.endsWith('.svg')
-            ? SvgPicture.network(
-                country.flagUrl,
-                fit: BoxFit.cover,
-                placeholderBuilder: (context) =>
-                    Container(color: Colors.grey[200]),
-              )
-            : CachedNetworkImage(
-                imageUrl: country.flagUrl,
-                fit: BoxFit.cover,
-                placeholder: (context, url) =>
-                    Container(color: Colors.grey[200]),
-                errorWidget: (context, url, error) => const Icon(Icons.error),
-              ),
+    return Hero(
+      tag: isHeroEnabled ? country.cca2 : UniqueKey(),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12.0),
+        child: SizedBox(
+          width: width,
+          height: size,
+          child: country.flagUrl.endsWith('.svg')
+              ? SvgPicture.network(
+                  country.flagUrl,
+                  fit: BoxFit.cover,
+                  placeholderBuilder: (context) =>
+                      Container(color: Colors.grey[200]),
+                )
+              : CachedNetworkImage(
+                  imageUrl: country.flagUrl,
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) =>
+                      Container(color: Colors.grey[200]),
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
+                ),
+        ),
       ),
     );
   }

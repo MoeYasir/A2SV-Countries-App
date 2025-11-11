@@ -1,14 +1,15 @@
 import 'package:a2sv_project/presentation/home/cubit/home_cubit.dart';
 import 'package:a2sv_project/presentation/home/cubit/home_state.dart';
 import 'package:a2sv_project/presentation/shared_widgets/country_list_shimmer.dart';
-import 'package:a2sv_project/presentation/shared_widgets/country_list_tile.dart';
+import 'package:a2sv_project/presentation/shared_widgets/app_list_tile.dart';
 import 'package:a2sv_project/presentation/shared_widgets/tile_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final bool isActive;
+  const HomePage({super.key, required this.isActive});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -96,6 +97,7 @@ class _HomePageState extends State<HomePage> {
                     itemBuilder: (context, index) {
                       final country = state.filteredCountries[index];
                       return AppListTile(
+                        isHeroEnabled: widget.isActive,
                         country: country,
                         style: TileStyle.home,
                       );
