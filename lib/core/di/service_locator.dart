@@ -2,6 +2,7 @@ import 'package:a2sv_project/data/datasources/remote/country_remote_data_source.
 import 'package:a2sv_project/data/datasources/remote/country_remote_data_source_impl.dart';
 import 'package:a2sv_project/data/repositories/country_repository.dart';
 import 'package:a2sv_project/data/repositories/country_repository_impl.dart';
+import 'package:a2sv_project/presentation/home/cubit/home_cubit.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 
@@ -17,4 +18,5 @@ void setup() {
   sl.registerLazySingleton<CountryRepository>(
     () => CountryRepositoryImpl(remoteDataSource: sl()),
   );
+  sl.registerFactory(() => HomeCubit(sl()));
 }
