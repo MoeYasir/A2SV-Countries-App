@@ -92,16 +92,20 @@ class _HomePageState extends State<HomePage> {
                       ),
                     );
                   }
-                  return ListView.builder(
-                    itemCount: state.filteredCountries.length,
-                    itemBuilder: (context, index) {
-                      final country = state.filteredCountries[index];
-                      return AppListTile(
-                        isHeroEnabled: widget.isActive,
-                        country: country,
-                        style: TileStyle.home,
-                      );
-                    },
+                  return RefreshIndicator(
+                    onRefresh: () =>
+                        context.read<HomeCubit>().fetchAllCountries(),
+                    child: ListView.builder(
+                      itemCount: state.filteredCountries.length,
+                      itemBuilder: (context, index) {
+                        final country = state.filteredCountries[index];
+                        return AppListTile(
+                          isHeroEnabled: widget.isActive,
+                          country: country,
+                          style: TileStyle.home,
+                        );
+                      },
+                    ),
                   );
                 }
 
