@@ -5,6 +5,7 @@ import 'package:a2sv_project/presentation/shared_widgets/country_list_tile.dart'
 import 'package:a2sv_project/presentation/shared_widgets/tile_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -35,9 +36,12 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
-        title: const Text('Countries'),
+        title: const Text(
+          'Countries',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         backgroundColor: Colors.white,
-        elevation: 0,
+        elevation: 0.h,
         centerTitle: false,
       ),
       body: Column(
@@ -80,10 +84,10 @@ class _HomePageState extends State<HomePage> {
 
                 if (state is HomeLoaded) {
                   if (state.filteredCountries.isEmpty) {
-                    return const Center(
+                    return Center(
                       child: Text(
                         'No countries found.',
-                        style: TextStyle(fontSize: 16, color: Colors.grey),
+                        style: TextStyle(fontSize: 16.sp, color: Colors.grey),
                       ),
                     );
                   }
@@ -105,7 +109,7 @@ class _HomePageState extends State<HomePage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(state.message),
-                        const SizedBox(height: 16),
+                        SizedBox(height: 16.sp),
                         ElevatedButton(
                           onPressed: () {
                             context.read<HomeCubit>().fetchAllCountries();

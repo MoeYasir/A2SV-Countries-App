@@ -5,6 +5,7 @@ import 'package:a2sv_project/presentation/shared_widgets/country_list_tile.dart'
 import 'package:a2sv_project/presentation/shared_widgets/tile_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class FavouritesPage extends StatelessWidget {
   const FavouritesPage({super.key});
@@ -16,7 +17,7 @@ class FavouritesPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Favourites'),
         backgroundColor: Colors.white,
-        elevation: 0,
+        elevation: 0.h,
       ),
       body: BlocBuilder<HomeCubit, HomeState>(
         builder: (context, state) {

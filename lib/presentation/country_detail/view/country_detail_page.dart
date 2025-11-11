@@ -5,6 +5,7 @@ import 'package:a2sv_project/presentation/country_detail/cubit/country_detail_st
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class CountryDetailPage extends StatelessWidget {
@@ -29,7 +30,7 @@ class CountryDetailPage extends StatelessWidget {
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               backgroundColor: Colors.transparent,
-              elevation: 0,
+              elevation: 0.h,
               foregroundColor: Colors.black87, // Make back arrow visible
             ),
             body: buildBody(context, state),
@@ -49,7 +50,7 @@ class CountryDetailPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(state.message),
-            const SizedBox(height: 16),
+            SizedBox(height: 16.sp),
             ElevatedButton(
               onPressed: () {
                 context.read<CountryDetailCubit>().fetchCountryDetails(
@@ -69,10 +70,10 @@ class CountryDetailPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             SizedBox(
-              height: 400,
+              height: 400.h,
 
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(16.0),
+                borderRadius: BorderRadius.circular(16.0.r),
                 child: country.flagUrl.endsWith('.svg')
                     ? SvgPicture.network(country.flagUrl, fit: BoxFit.cover)
                     : CachedNetworkImage(
@@ -81,10 +82,10 @@ class CountryDetailPage extends StatelessWidget {
                       ),
               ),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16.h),
 
             Padding(
-              padding: const EdgeInsets.all(12.0),
+              padding: EdgeInsets.all(12.0.w),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -94,7 +95,7 @@ class CountryDetailPage extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 24),
+                  SizedBox(height: 24.h),
                   _buildStatisticRow('Area', formatArea(country.area)),
                   _buildStatisticRow(
                     'Population',
@@ -102,7 +103,7 @@ class CountryDetailPage extends StatelessWidget {
                   ),
                   _buildStatisticRow('Region', country.region),
                   _buildStatisticRow('Sub Region', country.subregion),
-                  const SizedBox(height: 16),
+                  SizedBox(height: 16.h),
 
                   Text(
                     'Timezone',
@@ -110,10 +111,10 @@ class CountryDetailPage extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: 16.h),
                   Wrap(
-                    spacing: 8.0,
-                    runSpacing: 8.0,
+                    spacing: 8.0.w,
+                    runSpacing: 8.0.w,
                     children: country.timezones
                         .map((tz) => _buildTimezoneChip(tz))
                         .toList(),
@@ -130,14 +131,17 @@ class CountryDetailPage extends StatelessWidget {
 
   Widget _buildStatisticRow(String label, String value) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: EdgeInsets.symmetric(vertical: 8.0.h),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: TextStyle(color: Colors.grey[600], fontSize: 16)),
+          Text(
+            label,
+            style: TextStyle(color: Colors.grey[600], fontSize: 16.sp),
+          ),
           Text(
             value,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp),
           ),
         ],
       ),
@@ -146,9 +150,9 @@ class CountryDetailPage extends StatelessWidget {
 
   Widget _buildTimezoneChip(String timezone) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+      padding: EdgeInsets.symmetric(horizontal: 12.0.w, vertical: 8.0.h),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8.0),
+        borderRadius: BorderRadius.circular(8.0.r),
         border: Border.all(color: Colors.grey[300]!),
       ),
       child: Text(timezone, style: TextStyle(fontWeight: FontWeight.bold)),
