@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:a2sv_project/data/repositories/country_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
   final CountryRepository _countryRepository;
+  Timer? _debounce;
 
   HomeCubit(this._countryRepository) : super(HomeInitial());
 
@@ -18,31 +21,35 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   void searchCountry(String query) {
-    final currentState = state;
-    if (currentState is HomeLoaded) {
-      if (query.isEmpty) {
-        emit(
-          HomeLoaded(
-            allCountries: currentState.allCountries,
-            filteredCountries: currentState.allCountries,
-          ),
-        );
-      } else {
-        final filteredList = currentState.allCountries
-            .where(
-              (country) =>
-                  country.name.toLowerCase().contains(query.toLowerCase()),
-            )
-            .toList();
+    if (_debounce?.isActive ?? false) _debounce?.cancel();
 
-        emit(
-          HomeLoaded(
-            allCountries: currentState.allCountries,
-            filteredCountries: filteredList,
-          ),
-        );
+    _debounce = Timer(const Duration(milliseconds: 500), () {
+      final currentState = state;
+      if (currentState is HomeLoaded) {
+        if (query.isEmpty) {
+          emit(
+            HomeLoaded(
+              allCountries: currentState.allCountries,
+              filteredCountries: currentState.allCountries,
+            ),
+          );
+        } else {
+          final filteredList = currentState.allCountries
+              .where(
+                (country) =>
+                    country.name.toLowerCase().contains(query.toLowerCase()),
+              )
+              .toList();
+
+          emit(
+            HomeLoaded(
+              allCountries: currentState.allCountries,
+              filteredCountries: filteredList,
+            ),
+          );
+        }
       }
-    }
+    });
   }
 
   Future<void> toggleFavouriteStatus(String cca2) async {
@@ -83,5 +90,11 @@ class HomeCubit extends Cubit<HomeState> {
         ),
       );
     }
+  }
+
+  @override
+  Future<void> close() {
+    _debounce?.cancel();
+    return super.close();
   }
 }
