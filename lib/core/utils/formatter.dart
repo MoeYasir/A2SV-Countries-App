@@ -2,7 +2,7 @@ import 'package:intl/intl.dart';
 
 String formatPopulation(int population) {
   if (population < 1000000) {
-    return NumberFormat.compact().format(population); // e.g., 530K
+    return NumberFormat.compact().format(population);
   } else {
     final formatter = NumberFormat.compact(explicitSign: false);
     formatter.maximumFractionDigits = 1;
@@ -16,4 +16,21 @@ String formatPopulation(int population) {
     }
     return formatted;
   }
+}
+
+String formatPopulationWithWords(int population) {
+  if (population >= 1000000000) {
+    double num = population / 1000000000;
+    return '${NumberFormat('0.##').format(num)} billion';
+  } else if (population >= 1000000) {
+    double num = population / 1000000;
+    return '${NumberFormat('0.##').format(num)} million';
+  } else {
+    return NumberFormat('#,##0').format(population);
+  }
+}
+
+String formatArea(double area) {
+  final numberFormat = NumberFormat('#,##0');
+  return '${numberFormat.format(area)} sq km';
 }

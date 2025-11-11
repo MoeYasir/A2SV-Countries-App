@@ -1,0 +1,1 @@
+enum TileStyle { home, favourite }

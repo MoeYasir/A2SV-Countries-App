@@ -1,4 +1,5 @@
 import 'package:a2sv_project/core/di/service_locator.dart';
+import 'package:a2sv_project/core/utils/formatter.dart';
 import 'package:a2sv_project/presentation/country_detail/cubit/country_detail_cubit.dart';
 import 'package:a2sv_project/presentation/country_detail/cubit/country_detail_state.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -17,11 +18,19 @@ class CountryDetailPage extends StatelessWidget {
       create: (_) => sl<CountryDetailCubit>()..fetchCountryDetails(countryCode),
       child: BlocBuilder<CountryDetailCubit, CountryDetailState>(
         builder: (context, state) {
+          final countryName = state is CountryDetailLoaded
+              ? state.country.name
+              : '';
           return Scaffold(
+            backgroundColor: Colors.grey[100],
             appBar: AppBar(
               title: Text(
-                state is CountryDetailLoaded ? state.country.name : '',
+                countryName,
+                style: TextStyle(fontWeight: FontWeight.bold),
               ),
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              foregroundColor: Colors.black87, // Make back arrow visible
             ),
             body: buildBody(context, state),
           );
@@ -57,49 +66,57 @@ class CountryDetailPage extends StatelessWidget {
       final country = state.country;
       return SingleChildScrollView(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Large Flag Image
             SizedBox(
-              height: 250,
-              width: double.infinity,
-              child: country.flagUrl.endsWith('.svg')
-                  ? SvgPicture.network(country.flagUrl, fit: BoxFit.cover)
-                  : CachedNetworkImage(
-                      imageUrl: country.flagUrl,
-                      fit: BoxFit.cover,
-                    ),
+              height: 400,
+
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(16.0),
+                child: country.flagUrl.endsWith('.svg')
+                    ? SvgPicture.network(country.flagUrl, fit: BoxFit.cover)
+                    : CachedNetworkImage(
+                        imageUrl: country.flagUrl,
+                        fit: BoxFit.cover,
+                      ),
+              ),
             ),
+            const SizedBox(height: 16),
+
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(12.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Key Statistics Section
                   Text(
                     'Key Statistics',
-                    style: Theme.of(context).textTheme.titleLarge,
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 24),
+                  _buildStatisticRow('Area', formatArea(country.area)),
                   _buildStatisticRow(
-                    'Population:',
-                    country.population.toString(),
+                    'Population',
+                    formatPopulationWithWords(country.population),
                   ),
-                  _buildStatisticRow('Region:', country.region),
-                  _buildStatisticRow('Capital:', country.capital),
-                  _buildStatisticRow('Subregion:', country.subregion),
-                  _buildStatisticRow('Area:', '${country.area} km²'),
-                  const Divider(height: 32),
+                  _buildStatisticRow('Region', country.region),
+                  _buildStatisticRow('Sub Region', country.subregion),
+                  const SizedBox(height: 16),
 
-                  // Timezone Section
                   Text(
                     'Timezone',
-                    style: Theme.of(context).textTheme.titleLarge,
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   const SizedBox(height: 16),
-                  _buildStatisticRow(
-                    'Timezones:',
-                    country.timezones.join(', '),
+                  Wrap(
+                    spacing: 8.0,
+                    runSpacing: 8.0,
+                    children: country.timezones
+                        .map((tz) => _buildTimezoneChip(tz))
+                        .toList(),
                   ),
                 ],
               ),
@@ -113,14 +130,28 @@ class CountryDetailPage extends StatelessWidget {
 
   Widget _buildStatisticRow(String label, String value) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: const TextStyle(fontWeight: FontWeight.bold)),
-          Text(value),
+          Text(label, style: TextStyle(color: Colors.grey[600], fontSize: 16)),
+          Text(
+            value,
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          ),
         ],
       ),
+    );
+  }
+
+  Widget _buildTimezoneChip(String timezone) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8.0),
+        border: Border.all(color: Colors.grey[300]!),
+      ),
+      child: Text(timezone, style: TextStyle(fontWeight: FontWeight.bold)),
     );
   }
 }

@@ -5,6 +5,7 @@ class CountrySummary extends Equatable {
   final String flagUrl;
   final int population;
   final String cca2;
+  final String capital;
   final bool isFavourite;
 
   const CountrySummary({
@@ -12,14 +13,17 @@ class CountrySummary extends Equatable {
     required this.flagUrl,
     required this.population,
     required this.cca2,
+    required this.capital,
     this.isFavourite = false,
   });
+
   CountrySummary copyWith({bool? isFavourite}) {
     return CountrySummary(
       name: name,
       flagUrl: flagUrl,
       population: population,
       cca2: cca2,
+      capital: capital,
       isFavourite: isFavourite ?? this.isFavourite,
     );
   }
@@ -30,9 +34,19 @@ class CountrySummary extends Equatable {
       flagUrl: json['flags']['svg'] ?? json['flags']['png'] ?? '',
       population: json['population'] ?? 0,
       cca2: json['cca2'] ?? '',
+      capital: (json['capital'] as List<dynamic>?)?.isNotEmpty == true
+          ? json['capital'][0]
+          : 'N/A',
     );
   }
 
   @override
-  List<Object?> get props => [name, flagUrl, population, cca2, isFavourite];
+  List<Object?> get props => [
+    name,
+    flagUrl,
+    population,
+    cca2,
+    capital,
+    isFavourite,
+  ];
 }

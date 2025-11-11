@@ -14,7 +14,7 @@ class CountryRemoteDataSourceImpl implements CountryRemoteDataSource {
     try {
       final response = await dio.get(
         '${ApiConstants.baseUrl}${ApiConstants.allCountries}',
-        queryParameters: {'fields': 'name,flags,population,cca2'},
+        queryParameters: {'fields': 'name,flags,population,cca2,capital'},
       );
 
       if (response.statusCode == 200) {
@@ -33,7 +33,7 @@ class CountryRemoteDataSourceImpl implements CountryRemoteDataSource {
     try {
       final response = await dio.get(
         '${ApiConstants.baseUrl}${ApiConstants.searchByName}/$name',
-        queryParameters: {'fields': 'name,flags,population,cca2'},
+        queryParameters: {'fields': 'name,flags,population,cca2,capital'},
       );
 
       if (response.statusCode == 200) {

@@ -44,4 +44,44 @@ class HomeCubit extends Cubit<HomeState> {
       }
     }
   }
+
+  Future<void> toggleFavouriteStatus(String cca2) async {
+    final currentState = state;
+    if (currentState is HomeLoaded) {
+      final countryToUpdate = currentState.allCountries.firstWhere(
+        (c) => c.cca2 == cca2,
+      );
+
+      final isCurrentlyFavourite = countryToUpdate.isFavourite;
+
+      if (isCurrentlyFavourite) {
+        await _countryRepository.removeFavourite(cca2);
+      } else {
+        await _countryRepository.addFavourite(cca2);
+      }
+
+      final updatedAllCountries = currentState.allCountries.map((country) {
+        if (country.cca2 == cca2) {
+          return country.copyWith(isFavourite: !isCurrentlyFavourite);
+        }
+        return country;
+      }).toList();
+
+      final updatedFilteredCountries = currentState.filteredCountries.map((
+        country,
+      ) {
+        if (country.cca2 == cca2) {
+          return country.copyWith(isFavourite: !isCurrentlyFavourite);
+        }
+        return country;
+      }).toList();
+
+      emit(
+        HomeLoaded(
+          allCountries: updatedAllCountries,
+          filteredCountries: updatedFilteredCountries,
+        ),
+      );
+    }
+  }
 }
